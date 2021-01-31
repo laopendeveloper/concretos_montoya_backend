@@ -10,7 +10,7 @@ from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated
 )
-#from concretos.users.permissions import IsAccountOwner
+from users.permissions import IsAccountOwner
 
 # Serializers
 from users.serializers.profiles import ProfileModelSerializer
@@ -18,14 +18,15 @@ from users.serializers.users import (
     AccountVerificationSerializer,
     UserLoginSerializer,
     UserModelSerializer,
-    UserSignUpSerializer
+    UserSignUpSerializer,
+    UserTypeModelSerializer
 )
 
 # Models
-from users.models import User
+from users.models import User, UserType
 
 
-class UserViewset(mixins.RetrieveModelMixin,
+class UserViewSet(mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
                   viewsets.GenericViewSet):
     """User view set.
@@ -37,16 +38,16 @@ class UserViewset(mixins.RetrieveModelMixin,
     serializer_class = UserModelSerializer
     lookup_field = 'username'
 
-    #def get_permissions(self):
-    #    """Assign permissions based on action."""
-    #    if self.action in ['signup', 'login', 'verify']:
-    #        permissions = [AllowAny]
-    #    elif self.action in ['retrieve', 'update', 'partial_update', 'profile']:
-    #        permissions = [IsAuthenticated, IsAccountOwner]
-    #    else:
-    #        permissions = [IsAuthenticated]
-    #    return [p() for p in permissions]
-    
+    def get_permissions(self):
+        """Assign permissions based on action."""
+        if self.action in ['signup', 'login', 'verify']:
+            permissions = [AllowAny]
+        elif self.action in ['retrieve', 'update', 'partial_update', 'profile']:
+            permissions = [IsAuthenticated, IsAccountOwner]
+        else:
+            permissions = [IsAuthenticated]
+        return [p() for p in permissions]
+
     @action(detail=False, methods=['post'])
     def login(self, request):
         """"User sign in."""
@@ -96,13 +97,19 @@ class UserViewset(mixins.RetrieveModelMixin,
     def retrieve(self, request, *args, **kwargs):
         """Add extra data to the response."""
         response = super(UserViewSet, self).retrieve(request, *args, **kwargs)
-        circles = Circle.objects.filter(
+        '''circles = Circle.objects.filter(
             members=request.user,
             membership__is_active=True
-        )
+        )'''
         data = {
             'user': response.data,
-            'circles': CircleModelSerializer(circles, many=True).data
+            # 'circles': CircleModelSerializer(circles, many=True).data
         }
         response.data = data
         return response
+
+
+class UserTypeViewSet(viewsets.ModelViewSet):
+
+    queryset = UserType.objects.all()
+    serializer_class = UserTypeModelSerializer

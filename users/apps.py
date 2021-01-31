@@ -7,5 +7,5 @@ from django.apps import AppConfig
 class UsersAppConfig(AppConfig):
     """Users app config."""
 
-    name = 'concretos.users'
+    name = 'users'
     verbose = 'Users'

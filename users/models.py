@@ -8,6 +8,18 @@ from django.core.validators import RegexValidator
 # Utilities
 from utils.models import ConcretosModel
 
+
+class UserType(ConcretosModel):
+    """
+    This is a model to categorize each user.
+    """
+
+    name = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class User(ConcretosModel, AbstractUser):
 
     email = models.EmailField(
@@ -57,16 +69,21 @@ class Profile(ConcretosModel):
     and statistics.
     """
 
-    user = models.OneToOneField('users.User', on_delete=models.CASCADE)
+    user = models.OneToOneField('User', on_delete=models.CASCADE)
+    user_type = models.OneToOneField('UserType', on_delete=models.DO_NOTHING)
 
+    nss = models.TextField(max_length=500, blank=True)
+    hire_date = models.DateTimeField()
+    salary = models.FloatField()
     picture = models.ImageField(
         'profile picture',
         upload_to='users/pictures/',
         blank=True,
         null=True
     )
-    biography = models.TextField(max_length=500, blank=True)
-
+    address = models.TextField(max_length=500, blank=True)
+    country = models.TextField(max_length=500, blank=True)
+    city = models.TextField(max_length=500, blank=True)
 
     def __str__(self):
         """Return user's str representation."""

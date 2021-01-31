@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.validators import UniqueValidator
 
 # Models
-from users.models import User, Profile
+from users.models import User, Profile, UserType
 
 # Tasks
 from taskapp.tasks import send_confirmation_email
@@ -21,6 +21,7 @@ from users.serializers.profiles import ProfileModelSerializer
 
 # Utilities
 import jwt
+
 
 class UserModelSerializer(serializers.ModelSerializer):
     """User model serializer."""
@@ -137,3 +138,15 @@ class AccountVerificationSerializer(serializers.Serializer):
         user = User.objects.get(username=payload['user'])
         user.is_verified = True
         user.save()
+
+
+class UserTypeModelSerializer(serializers.ModelSerializer):
+    """User Type model serializer."""
+
+    class Meta:
+        """Meta class."""
+
+        model = UserType
+        fields = (
+            'name',
+        )
