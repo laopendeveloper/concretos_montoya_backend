@@ -29,16 +29,16 @@ class MachineViewSet(viewsets.ModelViewSet):
     queryset = Machine.objects.all()
     serializer_class = MachineModelSerializer
 
-    def retrieve(self, request, *args, **kwargs):
-        """Add extra data to the response."""
-        response = super(MachineViewSet, self).retrieve(request, *args, **kwargs)
-        machine_type = MachineType.objects.filter(
-            machine=request.machine
-        )
-        data = {
-            'machine': response.data,
-            'type': MachineTypeModelSerializer(machine_type, many=True).data
-        }
-        response.data = data
-        return response
+    # def retrieve(self, request, *args, **kwargs):
+    #    """Add extra data to the response."""
+    #    response = super(MachineViewSet, self).retrieve(request, *args, **kwargs)
+    #    machine_type = MachineType.objects.filter(
+    #        machine=request.machine
+    #    )
+    #    data = {
+    #        'machine': response.data,
+    #        'type': MachineTypeModelSerializer(machine_type, many=True).data
+    #    }
+    #    response.data = data
+    #    return response
 
