@@ -21,6 +21,8 @@ from users.serializers.users import (
     UserSignUpSerializer,
     UserTypeModelSerializer
 )
+from users.serializers import MyTokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Models
 from users.models import User, UserType
@@ -52,7 +54,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
     def login(self, request):
         """"User sign in."""
         serializer = UserLoginSerializer(data=request.data)
-        serializer.is_valid(raise_exeption=True)
+        serializer.is_valid(raise_exception=True)
         user, token = serializer.save()
         data = {
             'user': UserModelSerializer(user).data,
@@ -113,3 +115,8 @@ class UserTypeViewSet(viewsets.ModelViewSet):
 
     queryset = UserType.objects.all()
     serializer_class = UserTypeModelSerializer
+
+
+class MyObtainTokenPairView(TokenObtainPairView):
+    permission_classes = (AllowAny, )
+    serializer_class = MyTokenObtainPairSerializer
