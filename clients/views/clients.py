@@ -23,15 +23,15 @@ class ContactViewSet(viewsets.ModelViewSet):
     queryset = ClientContact.objects.all()
     serializer_class = ContactModelSerializer
 
-    def retrieve(self, request, *args, **kwargs):
-        """Add extra data to the response."""
-        response = super(ContactViewSet, self).retrieve(request, *args, **kwargs)
-        clients = Client.objects.filter(
-            client=request.client
-        )
-        data = {
-            'contact': response.data,
-            'client': ClientModelSerializer(clients, many=True).data
-        }
-        response.data = data
-        return response
+    # def retrieve(self, request, *args, **kwargs):
+    #    """Add extra data to the response."""
+    #    response = super(ContactViewSet, self).retrieve(request, *args, **kwargs)
+    #    clients = Client.objects.filter(
+    #        client=request.client
+    #    )
+    #    data = {
+    #        'contact': response.data,
+    #        'client': ClientModelSerializer(clients, many=True).data
+    #    }
+    #    response.data = data
+    #    return response

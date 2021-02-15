@@ -20,7 +20,7 @@ class ClientModelSerializer(serializers.ModelSerializer):
 class ContactModelSerializer(serializers.ModelSerializer):
     """Contact model serializer."""
 
-    client = ClientModelSerializer(read_only=True)
+    client = ClientModelSerializer
 
     class Meta:
         """Meta class."""
